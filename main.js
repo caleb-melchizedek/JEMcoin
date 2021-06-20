@@ -30,11 +30,32 @@ class Blockchain{
     this.chain.push(newBlock);
   }
 
+  isChainValid(){
+    for( let i=1; i<this.chain.length; i++){
+      const currentBlock= this.chain[i];
+      const previousBlock= this.chain[i-1];
+
+      if(currentBlock.hash !== currentBlock.calculateHash()){
+        return false;
+      }
+      if(currentBlock.previousHash !== previousBlock.hash){
+        return false;
+      }
+    }
+    return true;
+  }
+    
 }
 
 
 let JEMcoin = new Blockchain();
 JEMcoin.addBlock( new Block(1, "10/01/2020", {amount:4}));
-JEMcoin.addBlock( new Block(2, "11/01/2020", {amount:20}))
+JEMcoin.addBlock( new Block(2, "11/01/2020", {amount:20}));
 
-console.log(JSON.stringify(JEMcoin,null,4)); 
+console.log('Is Block chain valid? '+JEMcoin.isChainValid());
+ JEMcoin.chain[1].data={amount:100};
+ JEMcoin.chain[1].hash= JEMcoin.chain[1].calculateHash();
+
+ console.log('Is Block chain valid? '+JEMcoin.isChainValid());
+
+//console.log(JSON.stringify(JEMcoin,null,4)); 
